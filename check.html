@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vehicle Safety Check — Fleet Hub</title>
+<link rel="stylesheet" href="assets/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="topbar-inner">
+      <a href="index.html" style="text-decoration:none;">
+        <div class="brand">
+          <span class="mark">FLEET HUB</span>
+          <span class="sub">JDL Contractors Ltd</span>
+        </div>
+      </a>
+      <a class="topbar-action" href="index.html">Home</a>
+    </div>
+  </div>
+  <div class="hazard-bar"></div>
+
+  <div class="page" id="formScreen">
+    <p class="eyebrow">Weekly Check</p>
+    <h1 class="page-title">Vehicle Safety Check Sheet</h1>
+    <p class="page-intro">To be completed every Monday by the driver of the vehicle. Please complete fully — any defects are reported to management automatically when you submit, but please also flag them in person.</p>
+
+    <div id="formAlert"></div>
+
+    <form id="checkForm">
+      <div class="card">
+        <div class="section-title"><span class="dot"></span>Your Details</div>
+        <div style="height:14px"></div>
+        <div class="field">
+          <label for="checkDate">Date</label>
+          <input type="date" id="checkDate" required>
+        </div>
+        <div class="field">
+          <label for="driverName">Who is completing this form?</label>
+          <input type="text" id="driverName" placeholder="Your full name" required autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="vehicleReg">Vehicle Registration Number</label>
+          <input type="text" id="vehicleReg" list="regList" placeholder="e.g. AD19 EKX" required autocomplete="off" style="text-transform:uppercase;">
+          <datalist id="regList"></datalist>
+          <div class="hint" id="regHint"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-title"><span class="dot"></span>External</div>
+        <div id="externalChecks"></div>
+      </div>
+
+      <div class="card">
+        <div class="section-title"><span class="dot"></span>Internal</div>
+        <div id="internalChecks"></div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" id="submitBtn">Submit Check Sheet</button>
+    </form>
+  </div>
+
+  <div class="page hidden" id="successScreen">
+    <div class="success-screen card">
+      <div class="icon" id="successIcon">✅</div>
+      <h2 style="font-family:var(--font-display);margin:0 0 8px;" id="successTitle">Check sheet submitted</h2>
+      <p class="muted" id="successMsg">Thanks — this has been logged.</p>
+      <div style="height:18px"></div>
+      <button class="btn btn-ghost" id="newCheckBtn">Submit another check</button>
+    </div>
+  </div>
+
+  <footer class="site-footer">Fleet Hub · JDL Contractors LTD</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/supabase-config.js"></script>
+  <script src="assets/checklist-items.js"></script>
+  <script src="assets/check.js"></script>
+</body>
+</html>

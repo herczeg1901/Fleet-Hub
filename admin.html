@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Fleet Hub</title>
+<link rel="stylesheet" href="assets/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- LOGIN -->
+  <div class="login-shell" id="loginScreen">
+    <div class="login-card">
+      <div class="brand" style="margin-bottom:22px;">
+        <span class="mark" style="color:var(--charcoal);">FLEET HUB</span>
+      </div>
+      <p class="eyebrow">Admin Access</p>
+      <h1 style="font-family:var(--font-display);font-size:22px;margin:0 0 18px;">Sign in</h1>
+      <div id="loginAlert"></div>
+      <form id="loginForm">
+        <div class="field">
+          <label for="loginEmail">Email</label>
+          <input type="text" id="loginEmail" placeholder="stephen@jdlcontractors.co.uk" required autocomplete="username">
+        </div>
+        <div class="field">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" placeholder="••••••••" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn btn-primary" id="loginBtn">Sign in</button>
+      </form>
+      <p class="small muted center" style="margin-top:18px;"><a href="index.html">← Back to Fleet Hub</a></p>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="hidden" id="dashboard">
+    <div class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">
+          <span class="mark">FLEET HUB</span>
+          <span class="sub">JDL Contractors Ltd · Admin</span>
+        </div>
+        <button class="topbar-action" id="logoutBtn">Log out</button>
+      </div>
+    </div>
+    <div class="hazard-bar"></div>
+
+    <div class="page">
+      <p class="eyebrow">Welcome, <span id="adminName"></span></p>
+      <h1 class="page-title">Fleet Dashboard</h1>
+
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="vehicles">Vehicle Register</button>
+        <button class="tab-btn" data-tab="submissions">Safety Check Submissions</button>
+      </div>
+
+      <!-- VEHICLES TAB -->
+      <div id="tab-vehicles">
+        <div class="flex-between" style="margin-bottom:14px;">
+          <input type="text" id="vehicleSearch" placeholder="Search reg, driver or vehicle type..." style="max-width:320px;padding:10px 12px;border:1.5px solid var(--line);border-radius:8px;background:white;">
+          <button class="btn btn-primary btn-small" id="addVehicleBtn">+ Add vehicle</button>
+        </div>
+        <div id="vehiclesAlert"></div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Reg</th><th>Vehicle</th><th>Service Due</th><th>MOT Due</th><th>Driver</th>
+                <th>Spare Keys</th><th>Lock</th><th>Seat Covers</th><th>1st Aid/Ext</th>
+                <th>Tracking</th><th>Last Check</th><th>Fuel Card</th><th>Notes</th><th></th>
+              </tr>
+            </thead>
+            <tbody id="vehiclesBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SUBMISSIONS TAB -->
+      <div id="tab-submissions" class="hidden">
+        <div class="flex-between" style="margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+          <div class="flex gap-8">
+            <button class="btn btn-ghost btn-small" data-filter="all">All</button>
+            <button class="btn btn-ghost btn-small" data-filter="defects">Defects only</button>
+            <button class="btn btn-ghost btn-small" data-filter="unreviewed">Unreviewed</button>
+          </div>
+        </div>
+        <div id="submissionsList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VEHICLE EDIT MODAL -->
+  <div class="hidden" id="vehicleModalOverlay" style="position:fixed;inset:0;background:rgba(17,21,28,0.6);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50;">
+    <div class="card" style="max-width:480px;width:100%;max-height:88vh;overflow-y:auto;margin-bottom:0;">
+      <h2 id="modalTitle" style="font-family:var(--font-display);margin:0 0 16px;">Edit vehicle</h2>
+      <form id="vehicleForm">
+        <input type="hidden" id="v_id">
+        <div class="field"><label>Registration</label><input type="text" id="v_reg" required></div>
+        <div class="field"><label>Vehicle type</label><input type="text" id="v_type" placeholder="e.g. Ford Transit Custom"></div>
+        <div class="field"><label>Service due</label><input type="date" id="v_service"></div>
+        <div class="field"><label>MOT due</label><input type="date" id="v_mot"></div>
+        <div class="field"><label>Current driver</label><input type="text" id="v_driver"></div>
+        <div class="field"><label>Lock type</label>
+          <select id="v_lock">
+            <option value="">—</option>
+            <option value="Disc Lock">Disc Lock</option>
+            <option value="Stop Lock">Stop Lock</option>
+            <option value="None">None</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Equipment</label>
+          <div class="flex gap-12" style="flex-wrap:wrap;">
+            <label class="small"><input type="checkbox" id="v_keys"> Spare keys</label>
+            <label class="small"><input type="checkbox" id="v_seats"> Seat covers</label>
+            <label class="small"><input type="checkbox" id="v_aid"> First aid / fire ext</label>
+            <label class="small"><input type="checkbox" id="v_tracking"> Tracking system</label>
+            <label class="small"><input type="checkbox" id="v_fuel"> Fuel card</label>
+          </div>
+        </div>
+        <div class="field"><label>Last vehicle check</label><input type="date" id="v_lastcheck"></div>
+        <div class="field"><label>Notes</label><textarea id="v_notes"></textarea></div>
+        <div class="flex gap-8" style="margin-top:6px;">
+          <button type="submit" class="btn btn-primary" style="flex:1;">Save vehicle</button>
+          <button type="button" class="btn btn-ghost" id="cancelModalBtn">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/supabase-config.js"></script>
+  <script src="assets/checklist-items.js"></script>
+  <script src="assets/admin.js"></script>
+</body>
+</html>
