@@ -96,9 +96,10 @@ document.getElementById("checkForm").addEventListener("submit", async (e) => {
   const driverName = document.getElementById("driverName").value.trim();
   const vehicleReg = document.getElementById("vehicleReg").value.trim().toUpperCase();
   const checkDate = document.getElementById("checkDate").value;
+  const mileage = document.getElementById("mileage").value;
 
-  if (!driverName || !vehicleReg || !checkDate) {
-    showAlert("Please fill in your name, the van registration and the date.");
+  if (!driverName || !vehicleReg || !checkDate || !mileage) {
+    showAlert("Please fill in your name, van registration, mileage and the date.");
     return;
   }
 
@@ -124,6 +125,7 @@ document.getElementById("checkForm").addEventListener("submit", async (e) => {
     vehicle_reg: vehicleReg,
     responses: responses,
     has_defects: hasDefects,
+    mileage: parseInt(mileage),
   });
 
   submitBtn.disabled = false;
