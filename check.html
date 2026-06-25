@@ -64,6 +64,18 @@
         <div id="internalChecks"></div>
       </div>
 
+   <div class="card">
+        <div class="section-title"><span class="dot"></span>Photos (Optional)</div>
+        <div style="height:14px"></div>
+        <p class="small muted" style="margin:0 0 14px;">Take photos of any damage, defects or anything worth recording. You can add up to 5 photos.</p>
+        <div id="photoPreviewArea" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px;"></div>
+        <label class="btn btn-ghost" style="cursor:pointer;display:inline-flex;align-items:center;gap:8px;">
+          📷 Add photo
+          <input type="file" id="photoInput" accept="image/*" capture="environment" multiple style="display:none;">
+        </label>
+        <div class="hint" style="margin-top:8px;">Photos are saved securely and visible to management only.</div>
+      </div>
+
       <button type="submit" class="btn btn-primary" id="submitBtn">Submit Check Sheet</button>
     </form>
   </div>
