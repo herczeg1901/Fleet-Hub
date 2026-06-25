@@ -275,6 +275,16 @@ function renderSubmissions() {
           <strong>Flagged:</strong> ${flaggedItems.map(i => i.q).join(" · ")}
         </div>` : ""}
       <div class="hidden" id="detail-${s.id}" style="margin-top:14px;border-top:1px solid var(--line);padding-top:14px;">
+        ${s.photo_urls && s.photo_urls.length > 0 ? `
+          <div style="margin-bottom:16px;">
+            <div class="small" style="font-weight:700;margin-bottom:8px;">📷 Photos (${s.photo_urls.length})</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              ${s.photo_urls.map(url => `
+                <a href="${url}" target="_blank">
+                  <img src="${url}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;border:1.5px solid var(--line);">
+                </a>`).join("")}
+            </div>
+          </div>` : ""}
         ${items.map(item => {
           const r = s.responses[item.id];
           if (!r) return "";

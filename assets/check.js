@@ -66,6 +66,49 @@ document.getElementById("vehicleReg").addEventListener("input", (e) => {
   e.target.value = e.target.value.toUpperCase();
 });
 
+// Photo preview
+let selectedPhotos = [];
+document.getElementById("photoInput").addEventListener("change", (e) => {
+  const files = Array.from(e.target.files);
+  const remaining = 5 - selectedPhotos.length;
+  const toAdd = files.slice(0, remaining);
+  selectedPhotos = [...selectedPhotos, ...toAdd];
+  renderPhotoPreview();
+  e.target.value = "";
+});
+
+function renderPhotoPreview() {
+  const area = document.getElementById("photoPreviewArea");
+  area.innerHTML = selectedPhotos.map((file, idx) => {
+    const url = URL.createObjectURL(file);
+    return `
+      <div style="position:relative;width:80px;height:80px;">
+        <img src="${url}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;border:1.5px solid var(--line);">
+        <button type="button" onclick="removePhoto(${idx})" style="position:absolute;top:-6px;right:-6px;background:var(--signal-red);color:white;border:none;border-radius:50%;width:20px;height:20px;font-size:12px;cursor:pointer;line-height:1;">✕</button>
+      </div>`;
+  }).join("");
+}
+
+function removePhoto(idx) {
+  selectedPhotos.splice(idx, 1);
+  renderPhotoPreview();
+}
+
+async function uploadPhotos(vehicleReg, checkDate) {
+  const urls = [];
+  for (const file of selectedPhotos) {
+    const ext = file.name.split(".").pop();
+    const path = `${vehicleReg}/${checkDate}-${Date.now()}.${ext}`;
+    const { error } = await supabaseClient.storage
+      .from("check-photos")
+      .upload(path, file, { upsert: true });
+    if (!error) {
+      const { data } = supabaseClient.storage.from("check-photos").getPublicUrl(path);
+      urls.push(data.publicUrl);
+    }
+  }
+  return urls;
+}
 function showAlert(message, type = "error") {
   document.getElementById("formAlert").innerHTML =
     `<div class="alert alert-${type}">${message}</div>`;
@@ -119,15 +162,17 @@ document.getElementById("checkForm").addEventListener("submit", async (e) => {
   submitBtn.disabled = true;
   submitBtn.innerHTML = `<span class="spinner"></span> Submitting...`;
 
+  const photoUrls = await uploadPhotos(vehicleReg, checkDate);
+
   const { error } = await supabaseClient.from("safety_checks").insert({
     check_date: checkDate,
     driver_name: driverName,
     vehicle_reg: vehicleReg,
     responses: responses,
-    has_defects: hasDefects,
+ has_defects: hasDefects,
     mileage: parseInt(mileage),
+    photo_urls: photoUrls,
   });
-
   submitBtn.disabled = false;
   submitBtn.textContent = "Submit Check Sheet";
 
